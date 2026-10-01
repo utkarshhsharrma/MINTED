@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MINTED™ — Brush Different.</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<style>
+:root{--ivory:#F6F2E9;--ink:#000;--mint:#6FE3B5;--lime:#C8FF3D;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-behavior:smooth;scroll-padding-top:80px;height:100%}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;overflow-x:hidden;animation:pg .9s ease both}
+@keyframes pg{from{opacity:0}to{opacity:1}}
+.h{font-weight:800;letter-spacing:-.045em;line-height:.88}
+.lab{font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.85rem}
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.chrome{background:linear-gradient(135deg,#f4f6f7,#aab2b8 40%,#eef1f2 55%,#8d979d)}
+.mq{display:flex;width:max-content;animation:mq 26s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.fl{animation:fl 7s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-16px) rotate(4deg)}}
+.btn{transition:transform .25s ease,background .25s,color .25s;will-change:transform}
+.acc{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.acc.o{grid-template-rows:1fr}
+.acc>div{overflow:hidden}
+.card{border-radius:2.2rem;transition:transform .5s cubic-bezier(.2,.7,.2,1),box-shadow .5s}
+.card:hover{transform:translateY(-8px);box-shadow:0 30px 60px -30px rgba(0,0,0,.35)}
+.sc{overflow:hidden}.sc svg{transition:transform .8s cubic-bezier(.2,.7,.2,1)}.sc:hover svg{transform:scale(1.07) rotate(-3deg)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {useState,useEffect,useRef}=React;
+const html=htm.bind(React.createElement);
+
+/* ---------- hooks ---------- */
+function useIn(th=.2){const r=useRef(null),[v,s]=useState(false);
+  useEffect(()=>{const o=new IntersectionObserver(([e])=>{if(e.isIntersecting){s(true);o.disconnect()}},{threshold:th});o.observe(r.current);return()=>o.disconnect()},[]);return[r,v]}
+function useProg(){const r=useRef(null),[p,s]=useState(0);
+  useEffect(()=>{let f;const u=()=>{cancelAnimationFrame(f);f=requestAnimationFrame(()=>{const b=r.current.getBoundingClientRect(),h=innerHeight;s(Math.min(1,Math.max(0,(h-b.top)/(h+b.height))))})};u();addEventListener('scroll',u,{passive:true});return()=>removeEventListener('scroll',u)},[]);return[r,p]}
+
+/* ---------- primitives ---------- */
+const R=({children,d=0,className=''})=>{const[r,v]=useIn(.15);return html`<div ref=${r} style=${{transitionDelay:d+'ms'}} className=${'rv '+(v?'in ':'')+className}>${children}</div>`};
+const Btn=({children,dark,href='#shop',onClick})=>{const ref=useRef(null);
+  const mv=e=>{const b=ref.current.getBoundingClientRect();ref.current.style.transform=`translate(${(e.clientX-b.left-b.width/2)*.25}px,${(e.clientY-b.top-b.height/2)*.35}px)`};
+  return html`<a ref=${ref} href=${href} onClick=${onClick} onMouseMove=${mv} onMouseLeave=${()=>ref.current.style.transform=''} className=${'btn inline-flex items-center justify-center min-h-[52px] px-8 rounded-full text-sm font-bold tracking-wide '+(dark?'bg-black text-[#F6F2E9] hover:bg-[#6FE3B5] hover:text-black':'border-2 border-black hover:bg-black hover:text-[#F6F2E9]')}>${children}</a>`};
+const Ck=()=>html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>`;
+
+/* ---------- the tube ---------- */
+const Tube=({className='',style})=>html`
+<svg viewBox="0 0 200 540" className=${className} style=${style} role="img" aria-label="MINTED Fresh 01 toothpaste tube">
+  <defs>
+    <linearGradient id="bd" x1="0" x2="1"><stop offset="0" stop-color="#e9e4d6"/><stop offset=".35" stop-color="#fffdf7"/><stop offset=".7" stop-color="#f3efe3"/><stop offset="1" stop-color="#cfc9b8"/></linearGradient>
+    <linearGradient id="ch" x1="0" x2="1"><stop offset="0" stop-color="#8d979d"/><stop offset=".3" stop-color="#f4f6f7"/><stop offset=".55" stop-color="#b3bbc0"/><stop offset="1" stop-color="#7c868c"/></linearGradient>
+    <linearGradient id="mn" x1="0" x2="1"><stop offset="0" stop-color="#4fcf9f"/><stop offset=".4" stop-color="#9af2cf"/><stop offset="1" stop-color="#4fcf9f"/></linearGradient>
+  </defs>
+  <ellipse cx="100" cy="528" rx="62" ry="8" fill="#000" opacity=".18"/>
+  <path d="M32 58H168L178 410 148 450H52L22 410Z" fill="url(#bd)" stroke="#000" stroke-width="2.5"/>
+  <rect x="32" y="30" width="136" height="30" rx="4" fill="url(#ch)" stroke="#000" stroke-width="2.5"/>
+  ${[0,1,2,3,4,5,6,7].map(i=>html`<line key=${i} x1=${44+i*16} x2=${44+i*16} y1="34" y2="56" stroke="#000" stroke-opacity=".25"/>`)}
+  <rect x="55" y="450" width="90" height="62" rx="9" fill="url(#ch)" stroke="#000" stroke-width="2.5"/>
+  <text x="100" y="158" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="40" letter-spacing="-2" fill="#000">MINTED<tspan font-size="12" dy="-18">™</tspan></text>
+  <rect x="38" y="190" width="124" height="108" rx="12" fill="url(#mn)" stroke="#000" stroke-width="2.5"/>
+  <text x="100" y="244" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="34" fill="#000">FRESH</text>
+  <text x="100" y="284" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="40" fill="#000">01</text>
+  <circle cx="148" cy="212" r="6" fill="#C8FF3D" stroke="#000" stroke-width="1.5"/>
+  <text x="100" y="334" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="13" letter-spacing="2.5" fill="#000">ULTRA FRESH WHITENING</text>
+  <text x="100" y="354" text-anchor="middle" font-family="Barlow Condensed" font-weight="600" font-size="11" letter-spacing="2.5" fill="#000" opacity=".6">FLUORIDE TOOTHPASTE · 100g</text>
+  <text x="100" y="400" text-anchor="middle" font-family="Bricolage Grotesque" font-weight="800" font-size="13" fill="#000">Brush Different.</text>
+  <path d="M44 70C40 180 42 300 50 420" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none" opacity=".75"/>
+</svg>`;
+
+const Leaf=({c='#6FE3B5',className='',style})=>html`<svg viewBox="0 0 60 60" className=${className} style=${style} aria-hidden="true"><path d="M8 52C8 22 28 6 54 6 54 34 36 54 8 52Z" fill=${c} stroke="#000" stroke-width="2"/><path d="M8 52 38 22" stroke="#000" stroke-width="2"/></svg>`;
+const Bub=({s=40,className='',style})=>html`<span aria-hidden="true" className=${'absolute rounded-full fl '+className} style=${{width:s,height:s,background:'radial-gradient(circle at 30% 30%,#fff,rgba(111,227,181,.35) 60%,rgba(111,227,181,.1))',border:'1px solid rgba(0,0,0,.25)',...style}}></span>`;
+
+const Strip=({t,dark})=>html`<div className=${'overflow-hidden py-4 border-y-2 border-black '+(dark?'bg-black text-[#C8FF3D]':'bg-[#C8FF3D]')} aria-hidden="true"><div className="mq lab !text-lg">${[0,1].map(k=>html`<span key=${k} className="flex">${Array(6).fill(t).map((x,i)=>html`<span key=${i} className="px-6 whitespace-nowrap">${x}</span>`)}</span>`)}</div></div>`;
+
+/* ---------- nav ---------- */
+const links=[['Shop','#shop'],['About','#story'],['Ingredients','#inside'],['FAQ','#faq'],['Contact','#footer']];
+function Nav({bag}){const[o,s]=useState(false),[sc,ss]=useState(false);
+  useEffect(()=>{const f=()=>ss(scrollY>40);f();addEventListener('scroll',f);return()=>removeEventListener('scroll',f)},[]);
+  return html`<header className=${'fixed inset-x-0 top-0 z-50 transition-all duration-500 '+(sc||o?'bg-[#F6F2E9]/85 backdrop-blur-md border-b border-black/10':'')} style=${{paddingTop:'env(safe-area-inset-top,0px)'}}>
+    <nav className="max-w-7xl mx-auto flex items-center justify-between px-5 md:px-10 h-16" aria-label="Main">
+      <a href="#top" className="h text-2xl">MINTED<sup className="text-xs">™</sup></a>
+      <ul className="hidden md:flex gap-9 lab">${links.map(([n,h])=>html`<li key=${n}><a href=${h} className="hover:text-[#2aa77a] transition-colors">${n}</a></li>`)}</ul>
+      <div className="flex items-center gap-3">
+        <a href="#shop" className="lab bg-black text-[#F6F2E9] rounded-full px-5 py-3 min-h-[44px] flex items-center">Bag (${bag})</a>
+        <button className="md:hidden w-11 h-11 grid place-items-center" aria-expanded=${o} aria-label="Menu" onClick=${()=>s(!o)}>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">${o?html`<path d="M5 5l14 14M19 5 5 19"/>`:html`<path d="M3 8h18M3 16h18"/>`}</svg></button>
+      </div>
+    </nav>
+    <div className=${'md:hidden overflow-hidden transition-all duration-500 '+(o?'max-h-96':'max-h-0')}><ul className="px-5 pb-6 h text-4xl flex flex-col gap-3 pt-2">${links.map(([n,h])=>html`<li key=${n}><a href=${h} onClick=${()=>s(false)} className="block py-1">${n}</a></li>`)}</ul></div>
+  </header>`}
+
+/* ---------- sections ---------- */
+function Hero(){const[r,p]=useProg();
+  return html`<section id="top" ref=${r} className="relative pt-28 md:pt-32 pb-10 overflow-hidden min-h-screen">
+    <div className="max-w-7xl mx-auto px-5 md:px-10 grid md:grid-cols-12 items-center gap-6 relative">
+      <div className="md:col-span-7 relative z-10">
+        <p className="lab mb-5">New · Fresh 01 · Ultra Fresh Whitening Toothpaste</p>
+        <h1 className="h text-[clamp(3.6rem,13.5vw,12rem)]"><span className="block">BRUSH</span><span className="block">DIFFERENT.</span></h1>
+        <p className="mt-7 max-w-md text-lg md:text-xl leading-snug">Meet the toothpaste made for your main-character morning.</p>
+        <div className="mt-8 flex flex-wrap gap-3"><${Btn} dark>SHOP MINTED<//><${Btn} href="#drop">EXPLORE THE DROP<//></div>
+      </div>
+      <div className="md:col-span-5 relative h-[460px] md:h-[680px] grid place-items-center">
+        <div className="absolute w-[78%] aspect-square rounded-full bg-[#6FE3B5]" style=${{transform:`translateY(${p*-40}px)`}}></div>
+        <${Leaf} className="absolute w-16 md:w-24 top-4 left-2 fl" style=${{transform:`translateY(${p*-90}px)`}}/>
+        <${Leaf} c="#C8FF3D" className="absolute w-12 md:w-16 bottom-16 right-0 fl" style=${{animationDelay:'-3s'}}/>
+        <${Bub} s=${46} className="top-24 right-4"/><${Bub} s=${22} className="bottom-32 left-4" style=${{animationDelay:'-2s'}}/><${Bub} s=${30} className="top-1/2 left-0" style=${{animationDelay:'-4s'}}/>
+        <${Tube} className="relative h-full max-h-[640px] drop-shadow-2xl" style=${{transform:`rotate(${-12+p*18}deg) translateY(${p*30}px)`,transition:'transform .15s linear'}}/>
+      </div>
+    </div>
+    <div className="mt-10"><${Strip} t="FRESH • CLEAN • CONFIDENT • REPEAT •"/></div>
+  </section>`}
+
+const Badges=['Fresh Mint','Fluoride','Vegan','Cruelty-Free','Recyclable Packaging'];
+function Product({add}){const[ok,s]=useState(false);
+  return html`<section id="shop" className="py-24 md:py-36 px-5 md:px-10 max-w-7xl mx-auto">
+    <${R}><h2 className="h text-[clamp(2.6rem,8vw,7rem)] max-w-4xl">MEET YOUR NEW MORNING ESSENTIAL.</h2><//>
+    <${R} d=${150} className="mt-14 card bg-black text-[#F6F2E9] grid md:grid-cols-2 overflow-hidden !rounded-[2.5rem]">
+      <div className="relative bg-[#6FE3B5] grid place-items-center py-14 sc"><${Tube} className="h-[420px] md:h-[520px] drop-shadow-2xl"/><span className="absolute top-6 left-6 lab bg-[#C8FF3D] text-black rounded-full px-4 py-2">Fresh 01</span></div>
+      <div className="p-8 md:p-14 flex flex-col justify-center">
+        <p className="lab text-[#6FE3B5]">Ultra Fresh Whitening Toothpaste</p>
+        <h3 className="h text-5xl md:text-7xl mt-3">MINTED™<br/>FRESH 01</h3>
+        <p className="mt-5 text-lg opacity-80 max-w-sm">“Your mouth called. It wants better.”</p>
+        <ul className="mt-7 flex flex-wrap gap-2">${Badges.map(b=>html`<li key=${b} className="inline-flex items-center gap-1.5 border border-white/30 rounded-full px-3.5 py-2 text-sm"><${Ck}/> ${b}</li>`)}</ul>
+        <div className="mt-9 flex items-end gap-4"><span className="h text-6xl">₹299</span><span className="lab opacity-70 pb-1">100g</span></div>
+        <button onClick=${()=>{add();s(true);setTimeout(()=>s(false),1800)}} className="btn mt-7 self-start min-h-[56px] px-9 rounded-full bg-[#F6F2E9] text-black font-bold hover:bg-[#C8FF3D] active:scale-95">${ok?'ADDED ✓':'ADD TO BAG →'}</button>
+      </div>
+    <//>
+  </section>`}
+
+const Why=[['01','FRESH','A clean mint hit that leaves your mouth feeling ridiculously fresh.','bg-[#6FE3B5]','md:col-span-7'],['02','CLEAN','Designed for everyday cleaning and a confident smile.','bg-[#C8FF3D]','md:col-span-5 md:mt-24'],['03','GENTLE','An enamel-friendly everyday formula.','bg-black text-[#F6F2E9]','md:col-span-5 md:-mt-8'],['04','BETTER','Thoughtful ingredients. Thoughtful packaging. Less unnecessary stuff.','chrome','md:col-span-7 md:mt-10']];
+function WhyS(){return html`<section className="py-24 md:py-36 bg-black text-[#F6F2E9]"><div className="max-w-7xl mx-auto px-5 md:px-10">
+  <${R}><h2 className="h text-[clamp(2.8rem,9vw,8.5rem)] mb-16">BORING BRUSHING<br/>IS OVER.</h2><//>
+  <div className="grid md:grid-cols-12 gap-5">${Why.map(([n,t,x,c,l],i)=>html`<${R} key=${n} d=${i*80} className=${l}><article className=${'card p-8 md:p-12 min-h-[320px] flex flex-col justify-between text-black '+c+(c.includes('text-')?' !text-[#F6F2E9]':'')}><span className="lab text-xl">${n}</span><div><h3 className="h text-6xl md:text-8xl">${t}</h3><p className="mt-4 max-w-xs text-lg leading-snug">${x}</p></div></article><//>`)}</div></div></section>`}
+
+const Ing=[['FLUORIDE','Everyday cavity protection.','F'],['SILICA','Helps gently polish away surface stains.','Si'],['MINT','That unmistakably fresh finish.','Mn'],['XYLITOL','Adds a clean, refreshing touch to the formula.','Xy']];
+function Inside(){const[a,s]=useState(0);
+  return html`<section id="inside" className="py-24 md:py-36 px-5 md:px-10 max-w-7xl mx-auto relative">
+    <${R}><h2 className="h text-[clamp(2.6rem,8vw,7rem)]">WHAT'S INSIDE MATTERS.</h2><//>
+    <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">${Ing.map(([n,x,sy],i)=>html`<${R} key=${n} d=${i*90}><button onMouseEnter=${()=>s(i)} onFocus=${()=>s(i)} onClick=${()=>s(i)} className=${'card w-full text-left p-7 min-h-[300px] flex flex-col justify-between border-2 border-black transition-colors duration-500 '+(a===i?'bg-[#6FE3B5]':'bg-white/50')} style=${{transform:`translateY(${i%2?28:0}px)`}} aria-pressed=${a===i}>
+      <span className="h text-7xl">${sy}</span><span><span className="h text-3xl block">${n}</span><span className=${'block mt-2 overflow-hidden transition-all duration-500 '+(a===i?'max-h-24 opacity-100':'max-h-24 opacity-60')}>${x}</span></span></button><//>`)}</div>
+  </section>`}
+
+function Rotate(){const[r,p]=useProg();const ang=(p-.5)*110;
+  const L=[['Chrome-effect cap','top-[70%] left-[2%] md:left-[12%]'],['Fresh 01 · Ultra Fresh Whitening','top-[38%] right-[2%] md:right-[10%]'],['Fluoride toothpaste · 100g','top-[22%] left-[2%] md:left-[12%]'],['Recyclable tube','top-[82%] right-[2%] md:right-[12%]']];
+  return html`<section ref=${r} className="py-24 bg-[#6FE3B5] border-y-2 border-black overflow-hidden"><div className="max-w-7xl mx-auto px-5 md:px-10 text-center">
+    <${R}><p className="lab">Scroll to spin</p><h2 className="h text-[clamp(2.4rem,7vw,6rem)] mt-3">DESIGNED TO BE PICKED UP.</h2><//>
+    <div className="relative mt-10 h-[600px] grid place-items-center" style=${{perspective:'1100px'}}>
+      <${Tube} className="h-[540px] drop-shadow-2xl" style=${{transform:`rotateY(${ang}deg) rotateZ(${ang/10}deg)`,transition:'transform .12s linear'}}/>
+      ${L.map(([t,c])=>html`<span key=${t} className=${'absolute lab bg-black text-[#F6F2E9] rounded-full px-3 py-2 text-xs md:text-sm '+c}>${t}</span>`)}
+    </div></div></section>`}
+
+function Mood(){const W=['WAKE UP.','BRUSH UP.','SHOW UP.','REPEAT.'];
+  return html`<section className="py-24 md:py-36 px-5 md:px-10 max-w-7xl mx-auto"><${R}><h2 className="lab text-lg mb-10">YOUR ROUTINE, BUT MAKE IT A VIBE.</h2><//>
+   ${W.map((w,i)=>{const[r,v]=useIn(.5);return html`<div key=${w} ref=${r} className="overflow-hidden border-b-2 border-black py-2"><div className="h text-[clamp(3.5rem,16vw,14rem)] transition-all duration-[900ms]" style=${{transform:v?'none':'translateY(100%)',color:v?'#000':'transparent',WebkitTextStroke:v?'0':'2px #000',paddingLeft:i%2?'8vw':0}}>${w}<span className=${'inline-block ml-4 w-[.5em] h-[.5em] rounded-full align-middle transition-colors duration-700 '+(v?'bg-[#6FE3B5]':'bg-transparent')}></span></div></div>`})}
+  </section>`}
+
+const Rev=[['Finally, toothpaste that doesn\'t look like it belongs in my parents\' bathroom.','Aanya, 20','bg-[#6FE3B5]'],['Minted is literally part of my morning aesthetic now.','Rohan, 21','bg-[#C8FF3D]'],['10/10 packaging. 10/10 freshness.','Meera, 19','bg-white']];
+function Proof(){return html`<section className="py-24 md:py-32 px-5 md:px-10 max-w-7xl mx-auto"><${R}><h2 className="h text-[clamp(2.6rem,8vw,7rem)]">THE INTERNET IS SMILING.</h2><p className="lab mt-4 opacity-70">Fictional demo testimonials — not real customer reviews.</p><//>
+  <div className="mt-12 grid md:grid-cols-3 gap-5">${Rev.map(([q,n,c],i)=>html`<${R} key=${n} d=${i*100}><figure className=${'card p-8 min-h-[280px] flex flex-col justify-between border-2 border-black '+c} style=${{transform:`rotate(${[-1.5,1,-.5][i]}deg)`}}><div><div className="tracking-widest text-xl" aria-label="5 stars">★★★★★</div><blockquote className="mt-5 text-2xl leading-tight font-semibold">“${q}”</blockquote></div><figcaption className="lab mt-6">— ${n}</figcaption></figure><//>`)}</div></section>`}
+
+const Ig=[['Shades on, tube out','#C8FF3D'],['Coffee first','#F0D9B5'],['Counter aesthetic','#DADDE0'],['Mirror check','#6FE3B5'],['Gym bag essential','#111'],['Minimal bathroom','#EFE9DA'],['Mint, up close','#4fcf9f']];
+function Insta(){return html`<section className="py-24 bg-[#EFE9DA] border-y-2 border-black overflow-hidden"><div className="max-w-7xl mx-auto px-5 md:px-10"><${R}><h2 className="h text-[clamp(2.6rem,9vw,8rem)]">@MINTEDEVERYDAY</h2><p className="lab mt-3 opacity-70">Concept gallery · illustrated, not real posts</p><//>
+  <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px] md:auto-rows-[260px]">${Ig.map(([t,c],i)=>html`<${R} key=${t} d=${i*60} className=${'h-full '+(i===0?'md:col-span-2 md:row-span-2':i===3?'md:row-span-2':'')}><figure className="card sc h-full relative grid place-items-center" style=${{background:c,color:c==='#111'?'#F6F2E9':'#000'}}>
+    <${Tube} className=${i===0?'h-[75%]':'h-[70%]'} style=${{transform:`rotate(${[14,-18,8,-6,22,0,-30][i]}deg)`}}/>
+    ${i===0&&html`<svg viewBox="0 0 120 50" className="absolute w-28 top-6 right-6" aria-hidden="true"><path d="M5 12h110M10 14c0 28 20 30 28 24 6-5 8-14 8-24M74 14c0 10 2 19 8 24 8 6 28 4 28-24" fill="#000" stroke="#000" stroke-width="3"/></svg>`}
+    ${i===1&&html`<span className="absolute bottom-10 right-6 w-16 h-14 rounded-b-3xl bg-white border-2 border-black" aria-hidden="true"></span>`}
+    <figcaption className="absolute bottom-3 left-4 lab text-xs">${t}</figcaption></figure><//>`)}</div></div></section>`}
+
+function Drop(){return html`<section id="drop" className="py-24 md:py-36 px-5 md:px-10 max-w-7xl mx-auto"><${R}>
+  <div className="card relative overflow-hidden bg-[#C8FF3D] border-2 border-black !rounded-[2.5rem] grid md:grid-cols-2 items-center p-8 md:p-16 gap-10">
+    <div><p className="lab bg-black text-[#C8FF3D] inline-block rounded-full px-4 py-2">Launch edition · Drop 001</p><h2 className="h text-[clamp(3rem,9vw,8rem)] mt-6">THE MINTED DROP</h2>
+    <p className="h text-3xl mt-8">FRESH 01</p><p className="mt-2 text-lg">Ultra Fresh Whitening Toothpaste</p><p className="h text-5xl mt-5">₹299</p>
+    <div className="mt-8"><${Btn} dark href="#shop">GET YOURS →<//></div></div>
+    <div className="relative grid place-items-center h-[420px]"><div className="absolute inset-6 border-2 border-dashed border-black rounded-full"></div><${Tube} className="h-full fl"/><span className="absolute top-2 right-2 h text-6xl opacity-20">001</span></div>
+  </div><//></section>`}
+
+function Story(){return html`<section id="story" className="py-28 md:py-44 px-5 md:px-10"><div className="max-w-5xl mx-auto"><${R}><h2 className="h text-[clamp(2.4rem,7vw,6rem)]">WE THINK TOOTHPASTE DESERVES BETTER DESIGN.</h2><//>
+  <${R} d=${200}><p className="mt-12 md:ml-[25%] text-xl md:text-2xl leading-snug max-w-xl">MINTED was created to make one of the most ordinary parts of your morning feel a little less ordinary.<br/><br/>Better design. Fresh formulas. Zero boring energy.</p><//></div></section>`}
+
+const Q=[['Is MINTED suitable for everyday use?','Yes. FRESH 01 is made as an everyday toothpaste, with an enamel-friendly formula. Brush twice a day, as your dentist recommends.'],['Does MINTED contain fluoride?','Yes. FRESH 01 is a fluoride toothpaste.'],['Is MINTED vegan?','Yes. The formula is vegan and cruelty-free.'],['What does FRESH 01 taste like?','Clean, cool mint with a refreshing finish. Not sweet, not sharp.'],['Is the packaging recyclable?','Yes. The tube and carton are designed to be recyclable. Check local recycling guidance for your area.'],['How much toothpaste should I use?','A pea-sized amount is enough. Brush for two minutes, then spit and skip the rinse if you can.']];
+function Faq(){const[o,s]=useState(0);return html`<section id="faq" className="py-24 px-5 md:px-10 max-w-4xl mx-auto"><${R}><h2 className="h text-[clamp(2.6rem,8vw,6.5rem)] mb-12">FAQ.</h2><//>
+  ${Q.map(([q,a],i)=>html`<div key=${q} className="border-t-2 border-black last:border-b-2"><h3><button id=${'q'+i} aria-expanded=${o===i} aria-controls=${'a'+i} onClick=${()=>s(o===i?-1:i)} className="w-full flex justify-between items-center gap-4 text-left py-6 min-h-[64px] text-xl md:text-2xl font-semibold">${q}<span className=${'shrink-0 w-10 h-10 rounded-full border-2 border-black grid place-items-center transition-transform duration-300 '+(o===i?'rotate-45 bg-[#6FE3B5]':'')}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 4v16M4 12h16"/></svg></span></button></h3>
+  <div id=${'a'+i} role="region" aria-labelledby=${'q'+i} className=${'acc '+(o===i?'o':'')}><div><p className="pb-6 text-lg max-w-2xl opacity-80">${a}</p></div></div></div>`)}</section>`}
+
+function Final(){return html`<section className="relative bg-black text-[#F6F2E9] py-32 md:py-48 px-5 overflow-hidden text-center">
+  <${Tube} className="absolute left-1/2 top-1/2 h-[130%] -translate-x-1/2 -translate-y-1/2 opacity-20 rotate-[16deg]"/>
+  <div className="relative"><${R}><h2 className="h text-[clamp(3rem,11vw,10rem)]">READY TO BRUSH DIFFERENT?</h2><p className="mt-8 text-xl">Your bathroom counter just got an upgrade.</p><div className="mt-10"><a href="#shop" className="btn inline-flex items-center min-h-[60px] px-10 rounded-full bg-[#6FE3B5] text-black font-bold hover:bg-[#C8FF3D] hover:scale-105">SHOP MINTED →</a></div><//></div></section>`}
+
+function Footer(){const L=['Shop','About','Ingredients','FAQ','Contact','Instagram','Privacy','Terms'],H={Shop:'#shop',About:'#story',Ingredients:'#inside',FAQ:'#faq',Contact:'#footer'};
+  return html`<footer id="footer" className="px-5 md:px-10 pt-20 pb-10 max-w-7xl mx-auto"><div className="flex flex-col md:flex-row justify-between gap-10"><div><p className="h text-[clamp(3.5rem,12vw,9rem)]">MINTED™</p><p className="lab mt-3">Brush Different.</p></div>
+  <ul className="grid grid-cols-2 gap-x-12 gap-y-3 text-lg content-start">${L.map(l=>html`<li key=${l}><a href=${H[l]||'#top'} className="py-1 inline-block hover:text-[#2aa77a]">${l}</a></li>`)}</ul></div>
+  <p className="lab mt-16 opacity-60">© 2026 MINTED™ · Fictional brand for design demonstration.</p></footer>`}
+
+function App(){const[bag,setBag]=useState(0);return html`<${React.Fragment}><${Nav} bag=${bag}/><main><${Hero}/><${Product} add=${()=>setBag(b=>b+1)}/><${WhyS}/><${Inside}/><${Rotate}/><${Mood}/><${Proof}/><${Insta}/><${Drop}/><${Story}/><${Faq}/><${Final}/></main><${Footer}/><//>`}
+try{ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`)}catch(e){document.getElementById('root').innerHTML='<p style="padding:2rem;font-family:sans-serif">MINTED failed to load: '+e.message+'</p>'}
+</script>
+</body>
+</html>
